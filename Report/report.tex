@@ -1,0 +1,47 @@
+\documentclass[11pt]{article}
+
+% --- Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage{thmtools}
+\usepackage{hyperref}
+\usepackage{cleveref} % Smarter referencing
+
+% --- Theorem Environments ---
+\declaretheoremstyle[headfont=\bfseries, bodyfont=\itshape]{mystyle}
+\declaretheorem[style=mystyle, name=Theorem, numberwithin=section]{thm}
+\declaretheorem[style=mystyle, name=Lemma, sibling=thm]{lem}
+\declaretheorem[style=definition, name=Definition, sibling=thm]{defn}
+\declaretheorem[style=remark, name=Remark, numbered=no]{rem}
+
+% --- Custom Macros (Add your shortcuts here) ---
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% --- Metadata ---
+\title{Title}
+\author{Your Name \\ \small Department of Mathematics}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\input{introduction}
+
+\input{background}
+
+\input{data}
+
+\input{theory}
+
+\input{experiment}
+
+\input{conclusion}
+
+% \bibliographystyle{plain} 
+% \bibliography{refs} 
+
+\end{document}
