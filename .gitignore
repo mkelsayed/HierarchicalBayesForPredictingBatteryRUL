@@ -221,3 +221,7 @@ ipython_config.py
 
 # Build tool directories
 out/
+data/
+*.mat
+*.pkl
+.DS_Store
