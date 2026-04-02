@@ -1,0 +1,20 @@
+\section{Methodology}
+
+\subsection{Bayesian Heirarchical Models}
+
+A hierarchical model is a statistical model that includes multiple levels of parameters, where the parameters at one level are treated as random variables that depend on parameters at a higher level. In a Bayesian hierarchical model, we specify prior distributions for the parameters at each level, and use Bayes' theorem to update our beliefs about these parameters based on observed data.
+
+We would like to capture both individual battery characteristics and the influence of different usage (cycling) conditions. A two level hierarchical structure is considered:
+\begin{itemize}
+    \item Level 1 (Cell-level parameters $\theta_j$): Each battery $j$ has its own parameters $\theta_j$ that represent how early cycle features relate to battery aging for that particular subgroup or cycling condition.
+    \item Level 2 (Hyperparameters $\gamma$): These represent the parameters that govern the distribution of cell-level parameters across all subgroups, meaning they capture similarities across different batteries and cycling conditions.
+\end{itemize}
+
+Bayes rule is used to combine prior knowledge with the observed early-cycle data from multiple batteries to estimate posterior distributions of parameters at both levels. 
+
+The level 2 posterior is calculated as 
+$$
+P(\gamma | \{Y\}) \propto \text{Likelihood} \times \text{Prior}
+$$
+
+\subsection{Multichain Monte Carlo}
