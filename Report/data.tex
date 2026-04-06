@@ -1,0 +1,75 @@
+\section*{Data Dictionary}
+
+% Table 1: Cell Level
+\begin{table}[h]
+\centering
+\caption{Cell Level Variables}
+\label{tab:cell_level}
+\begin{tabular}{lll}
+\toprule
+Variable & Description & Type \\
+\midrule
+\texttt{cycle\_life} & Number of cycles until EoL & Float \\
+\texttt{charge\_policy} & Charging protocol & String \\
+\texttt{summary} & Metadata for each cycle & Dictionary \\
+\texttt{cycles} & Time series of measurements & Dictionary \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Table 2: Summary Level
+\begin{table}[h]
+\centering
+\caption{Summary Level (Cycle-by-Cycle Metadata)}
+\label{tab:summary_level}
+\begin{tabular}{lll}
+\toprule
+Variable & Description & Type \\
+\midrule
+\texttt{IR} & Internal resistance & Numeric array \\
+\texttt{QC} & Charge capacity & Numeric array \\
+\texttt{QD} & Discharge capacity & Numeric array \\
+\texttt{Tavg} & Average temperature & Numeric array \\
+\texttt{Tmin} & Minimum temperature & Numeric array \\
+\texttt{Tmax} & Maximum temperature & Numeric array \\
+\texttt{chargetime} & Charge time & Numeric array \\
+\texttt{cycle} & Cycle number & Numeric array \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Table 3: Cycle Level
+\begin{table}[h]
+\centering
+\caption{Cycle Level (Intra-cycle Time Series)}
+\label{tab:cycle_level}
+\begin{tabular}{lll}
+\toprule
+Variable & Description & Type \\
+\midrule
+\texttt{I} & Current & Numeric array \\
+\texttt{Qc} & Charge capacity & Numeric array \\
+\texttt{Qd} & Discharge capacity & Numeric array \\
+\texttt{Qdlin} & Linear interpolated discharge capacity & Numeric array \\
+\texttt{T} & Temperature & Numeric array \\
+\texttt{Tdlin} & Linear interpolated temperature & Numeric array \\
+\texttt{V} & Voltage & Numeric array \\
+\texttt{dQdV} & Derived vectors of discharge & Numeric array \\
+\texttt{t} & Time & Numeric array \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{Data Partitioning and Grouping Logic}
+Zhou and Howey (2023) partitioned the data into eight groups based on their cycling conditions and calculated the variance partition coefficient (VPC). Specifically, they calculated:
+
+\begin{align*}
+\text{VPC} &= \frac{\sigma^2_{\text{group}}}{\sigma^2_{\text{individual}} + \sigma^2_{\text{group}}} \\
+\sigma^2_{\text{group}} &= \text{var}\left(\bar{u}_j - \bar{u}\right), \quad \bar{u} = \frac{1}{N} \sum_{j=1}^{k} \sum_{i=1}^{n_j} y_{ji} \\
+\sigma^2_{\text{individual}} &= \text{var}\left(y_{ji} - \bar{u}_j\right), \quad \bar{u}_j = \frac{1}{n_j} \sum_{i=1}^{n_j} y_{ji}
+\end{align*}
+
+where $\sigma^2_{\text{group}}$ represents lifetime variance between groups and $\sigma^2_{\text{individual}}$ represents the total within-group lifetime variance. They obtained a VPC of 74.5\%, implying that between-group variance accounts for the majority of total lifetime variance. 
+
+\subsection*{Grouping Results}
+Following Zhou and Howey (2023), we first applied constrained K-means clustering on average charging C-rate. While this produced groups with low within-group C-rate variance, the resulting VPC was only 38.973\%. We subsequently grouped cells by their unique charging policy string and optimized via a hill-climbing algorithm. This produced a VPC of 74.406\%, matching the expected characteristics. The hill-climb grouping exhibits higher within-group C-rate variance but lower within-group EoL variance.

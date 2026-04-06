@@ -63,7 +63,7 @@ Together they form a two-level structure: in the first equation, each observatio
 
 The two-level structure creates dependency between group-level intercepts through the shared prior $N(\mu_\alpha, \sigma^2_\alpha)$. Specifically, each $\alpha_j$ is estimated from its group's data and also influenced by all other groups. This pulls data-sparse groups toward the population mean $\mu_\alpha$ while leaving data-rich groups largely unaffected. The strength of the pull is determined by $\sigma_\alpha$, which is learned from the data.
 
-\section*{Hierarchical Bayes}
+\subsection*{Hierarchical Bayes}
 In the multilevel modelling example above, the parameters $\mu_\alpha$ and $\sigma^2_\alpha$ are unknown. In Bayesian statistics, these parameters are treated as random variables which may be sampled from a prior distribution. Thus, the example above can be developed using Bayesian methods as follows:
 
 \begin{align*}
@@ -121,8 +121,7 @@ $F3_{ji}$ & Discharge capacity at cycle 2 \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-$\Delta Q(V)$ denotes the discharge curve difference as a function of voltage, following Severson et al. (2019).\footnote{TBD add as footnote.}
+\footnote{$\Delta Q(V)$ denotes the discharge curve difference as a function of voltage, following Severson et al. (2019).}
 
 \begin{align*}
 &\textbf{Level 3 (Hyperpriors):} & \boldsymbol{\gamma} &\sim \mathcal{N}(\mathbf{0}, 10\mathbf{I}) \\[6pt]
