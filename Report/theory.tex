@@ -6,7 +6,7 @@ Consider the set of observations $\{(x_i, y_i)\}_{i=1}^n$. The following linear 
 y = \beta_0 + \beta_1 x_i + \epsilon
 \]
 
-Now, suppose the data naturally contains $J$ groups. For example, $y_i$ can represent the price of a home and $x_i$ can represent its size in square feet. If this data is taken from $J$ different states in the United States, it may be useful to have different slopes and intercepts for each state—effectively representing different relationships between home prices and square footage for each state. Thus, the linear model becomes:
+Now, suppose the data naturally contains $J$ groups. For example, $y_i$ can represent the price of a home in a specific American state and $x_i$ can represent its size in square feet. If this data is taken from $J$ different states, it may be useful to have different slopes and intercepts for each state—effectively representing state-specific relationships between home prices and square footage. Thus, the linear model becomes:
 \[
 y_i = \alpha_{j[i]} + \beta_{j[i]} x_i + \epsilon_i
 \]
@@ -48,7 +48,8 @@ In the example above, the multilevel regression may have the same parameters for
 
 Gelman et al. analyzed a dataset consisting of radon levels for the 85 counties of Minnesota. The objective was to estimate the distribution of the radon levels of the houses within each county. The first proposed approach was to calculate statistics (e.g., average) using all homes from the sample (complete pooling). This approach does not consider variability among counties and complicates the task of estimating county-specific distributions. 
 
-The second proposed approach was to calculate the average log-radon levels in each county (no pooling). With the second approach, the authors found that the highest average log radon level of 85 belonged to a county of two observations. Thus, the variation among counties is overstated with the second method.
+The second proposed approach was to calculate the average log-radon levels in each county (no pooling). With this approach, the authors found that the highest county-specific average log radon level of 85 was much larger than the values from different counties. 
+However, this outlier may not be representative of the actual average log radon levels of its state, since it was obtained from a sample with two observations. It follows that the variation of radon levels across counties may be inflated.
 
 \subsection*{Partial Pooling}
 Gelman et al. provided a middle ground between complete and no pooling, which they called partial pooling. Specifically, they defined the observation-level model as:
@@ -61,7 +62,7 @@ with the group-level model:
 \]
 Together they form a two-level structure: in the first equation, each observation is normally distributed around its group's intercept plus a shared slope; in the second, the group intercepts are drawn from a common population distribution. 
 
-The two-level structure creates dependency between group-level intercepts through the shared prior $N(\mu_\alpha, \sigma^2_\alpha)$. Specifically, each $\alpha_j$ is estimated from its group's data and also influenced by all other groups. This pulls data-sparse groups toward the population mean $\mu_\alpha$ while leaving data-rich groups largely unaffected. The strength of the pull is determined by $\sigma_\alpha$, which is learned from the data.
+The two-level structure creates dependency between group-level intercepts through the shared prior $N(\mu_\alpha, \sigma^2_\alpha)$. Specifically, each $\alpha_j$ is estimated from its group's data and also influenced by all other groups. This pulls data-sparse groups toward the population mean $\mu_\alpha$ while leaving data-rich groups largely unaffected. The strength of the pull is also determined by $\sigma_\alpha$, which is learned from the data.
 
 \subsection*{Hierarchical Bayes}
 In the multilevel modelling example above, the parameters $\mu_\alpha$ and $\sigma^2_\alpha$ are unknown. In Bayesian statistics, these parameters are treated as random variables which may be sampled from a prior distribution. Thus, the example above can be developed using Bayesian methods as follows:
