@@ -1,12 +1,13 @@
 \section*{Introduction to Hierarchical Bayes}
 
 \subsection*{Multilevel Modelling}
-Consider the set of observations $\{(x_i, y_i)\}_{i=1}^n$. The following linear regression equation can be used to estimate a linear relationship between the explanatory variables $x_i$ and observations $y_i$:
+To motivate hierarchical modelling, consider first the standard linear regression setting:
 \[
 y = \beta_0 + \beta_1 x_i + \epsilon
 \]
 
-Now, suppose the data naturally contains $J$ groups. For example, $y_i$ can represent the price of a home in a specific American state and $x_i$ can represent its size in square feet. If this data is taken from $J$ different states, it may be useful to have different slopes and intercepts for each state—effectively representing state-specific relationships between home prices and square footage. Thus, the linear model becomes:
+Now suppose the data naturally contains J groups — for example, homes prices across J states, where the relationship between price and square footage may differ by state. 
+This suggests allowing group-specific parameters:
 \[
 y_i = \alpha_{j[i]} + \beta_{j[i]} x_i + \epsilon_i
 \]
@@ -25,7 +26,8 @@ where $j$ is the group index and $(\alpha_{j[i]}, \beta_{j[i]})$ follow some dis
 \]
 
 \subsection*{Pooling Tradeoff}
-In the example above, the multilevel regression may have the same parameters for each group (complete pooling) or the parameters can be completely determined by the group it belongs to (no pooling). In the latter case, the parameter distribution would be specified for each group: 
+In the example above, the multilevel regression may use the same parameters for all groups (complete pooling), or fit entirely separate models for each group with no information shared across them (no pooling). 
+In the latter case, the parameter distribution is specified independently for each group:
 \[
 \begin{pmatrix} 
 \alpha_j \\ 
@@ -39,17 +41,17 @@ In the example above, the multilevel regression may have the same parameters for
 \right), \quad j = 1, \dots, J
 \]
 
-\subsection*{Pooling Tradeoff Example - County Radon Levels}
-% \begin{figure}[h]
-%     \centering
-%     \includegraphics[width=0.8\textwidth]{Screenshot 2026-04-05 at 4.31.53 PM.png}
-%     \caption{Radon levels analysis}
-% \end{figure}
+\subsection*{Pooling Tradeoff: County Radon Levels}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{radon_example.png}
+    \caption{Estimates $\pm$ standard errors for average log radon levels in Minnesota counties versus number of observations per county: (a) no-pooling, (b) partial pooling. Counties with fewer observations have more variable estimates and larger standard errors under no pooling, illustrating how small samples produce unreliable county-level estimates.}
+\end{figure}
 
 Gelman et al. analyzed a dataset consisting of radon levels for the 85 counties of Minnesota. The objective was to estimate the distribution of the radon levels of the houses within each county. The first proposed approach was to calculate statistics (e.g., average) using all homes from the sample (complete pooling). This approach does not consider variability among counties and complicates the task of estimating county-specific distributions. 
 
 The second proposed approach was to calculate the average log-radon levels in each county (no pooling). With this approach, the authors found that the highest county-specific average log radon level of 85 was much larger than the values from different counties. 
-However, this outlier may not be representative of the actual average log radon levels of its state, since it was obtained from a sample with two observations. It follows that the variation of radon levels across counties may be inflated.
+However, this outlier may not be representative of the actual average log radon levels of its county, since it was obtained from a sample of only two observations. No pooling therefore produces unreliable estimates for data-sparse groups, motivating a middle ground.
 
 \subsection*{Partial Pooling}
 Gelman et al. provided a middle ground between complete and no pooling, which they called partial pooling. Specifically, they defined the observation-level model as:
@@ -65,7 +67,8 @@ Together they form a two-level structure: in the first equation, each observatio
 The two-level structure creates dependency between group-level intercepts through the shared prior $N(\mu_\alpha, \sigma^2_\alpha)$. Specifically, each $\alpha_j$ is estimated from its group's data and also influenced by all other groups. This pulls data-sparse groups toward the population mean $\mu_\alpha$ while leaving data-rich groups largely unaffected. The strength of the pull is also determined by $\sigma_\alpha$, which is learned from the data.
 
 \subsection*{Hierarchical Bayes}
-In the multilevel modelling example above, the parameters $\mu_\alpha$ and $\sigma^2_\alpha$ are unknown. In Bayesian statistics, these parameters are treated as random variables which may be sampled from a prior distribution. Thus, the example above can be developed using Bayesian methods as follows:
+In the multilevel modelling example above, the parameters $\mu_\alpha$ and $\sigma^2_\alpha$ are unknown. In Bayesian statistics, these parameters are treated as random variables which are assigned prior distributions. 
+Placing priors on these parameters gives the full hierarchical Bayesian model:
 
 \begin{align*}
 &\textbf{Level 3 (Hyperpriors):} & \mu_\alpha &\sim p(\mu_\alpha), \quad \sigma^2_\alpha \sim p(\sigma^2_\alpha) \\[6pt]
@@ -74,55 +77,9 @@ In the multilevel modelling example above, the parameters $\mu_\alpha$ and $\sig
 \end{align*}
 
 \section*{Hierarchical Bayesian Model for Battery Lifetime Prediction}
-Following Zhou \& Howey (2023), we now instantiate the three-level HBM structure described above for lithium-ion battery lifetime prediction under varying charging conditions. 
-
-\subsection*{Model Specification}
-The model variables and indices are summarized in Table 4, the feature vectors in Table 5, and the individual-level features in Table 6.
-
-\begin{table}[h]
-\centering
-\caption{Variables}
-\begin{tabular}{ll}
-\toprule
-Symbol & Description \\
-\midrule
-$j = 1, \dots, J$ & Cycling condition group index \\
-$i = 1, \dots, n_j$ & Cell index within group $j$ \\
-$y_{ji}$ & EoL time (days) for cell $i$ in group $j$ \\
-$\boldsymbol{\theta}_j \in \mathbb{R}^4$ & Regression coefficients for group $j$ \\
-$\sigma^2_j$ & Variance of group $j$ model \\
-$\boldsymbol{\gamma} \in \mathbb{R}^{4 \times 2}$ & Hyperparameter matrix linking cycling conditions to group coefficients \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[h]
-\centering
-\caption{Feature vectors}
-\begin{tabular}{lll}
-\toprule
-Symbol & Components & Level \\
-\midrule
-$\mathbf{x}_{ji} \in \mathbb{R}^4$ & $(1, F1_{ji}, F2_{ji}, F3_{ji})^\top$ & Individual \\
-$\mathbf{g}_j \in \mathbb{R}^2$ & $(1, \bar{g}_j)^\top$ & Group \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[h]
-\centering
-\caption{Individual-level features (computed from first 100 cycles)}
-\begin{tabular}{ll}
-\toprule
-Symbol & Description \\
-\midrule
-$F1_{ji}$ & Variance of $\Delta Q(V)$ between cycles 10 and 100 \\
-$F2_{ji}$ & Minimum of $\Delta Q(V)$ over the same interval \\
-$F3_{ji}$ & Discharge capacity at cycle 2 \\
-\bottomrule
-\end{tabular}
-\end{table}
-\footnote{$\Delta Q(V)$ denotes the discharge curve difference as a function of voltage, following Severson et al. (2019).}
+Following Zhou \& Howey (2023), we instantiate the three-level HBM for battery lifetime prediction. The response variable $y_{ji}$ denotes the EoL (in days) for cell $i$ in group $j$. 
+At the individual level, each cell is represented by a feature vector $\mathbf{x}_{ji} \in \mathbb{R}^4$ constructed from early-cycle measurements; at the group level, each cycling condition 
+group is represented by $\mathbf{g}_j \in \mathbb{R}^2$, which encodes the group's average C-rate. A full description of model variables and features is provided in the Appendix.
 
 \begin{align*}
 &\textbf{Level 3 (Hyperpriors):} & \boldsymbol{\gamma} &\sim \mathcal{N}(\mathbf{0}, 10\mathbf{I}) \\[6pt]
@@ -130,7 +87,9 @@ $F3_{ji}$ & Discharge capacity at cycle 2 \\
 &\textbf{Level 1 (Individual cells):} & y_{ji} &\sim \mathcal{N}(\boldsymbol{\theta}_j^\top \mathbf{x}_{ji}, \sigma^2_y), \quad i = 1, \dots, n_j
 \end{align*}
 
-The three-level structure encodes two sources of variability simultaneously: individual cell variability within each group (Level 1) and variability in the feature-label relationship across cycling conditions (Level 2). Crucially, at Level 2, the group coefficients $\boldsymbol{\theta}_j$ are not estimated independently — they are drawn from a common distribution centred at $\boldsymbol{\gamma}^\top \mathbf{g}_j$.
+The three-level structure encodes two sources of variability simultaneously: individual cell variability within each group (Level 1) and variability in 
+how features relate to EoL across cycling conditions (Level 2). Crucially, at Level 2, the group coefficients $\boldsymbol{\theta}_j$ are not estimated 
+independently — they are drawn from a common distribution centred at $\boldsymbol{\gamma}^\top \mathbf{g}_j$, allowing for information sharing across groups.
 
 \subsection*{Inference}
 Inference follows a sequential process. First, the posterior over the hyperparameters is estimated via MCMC:
@@ -141,7 +100,8 @@ where $P(\boldsymbol{\gamma}) = \mathcal{N}(\mathbf{0}, 10\mathbf{I})$ is the hy
 \[
 P(Y_j \mid \boldsymbol{\gamma}) = \int P(Y_j \mid \boldsymbol{\theta}_j) \cdot P(\boldsymbol{\theta}_j \mid \boldsymbol{\gamma}) \, d\boldsymbol{\theta}_j
 \]
-The resulting posterior $P(\boldsymbol{\gamma} \mid \{Y\})$ is then used as a prior to obtain the group-level posteriors $P(\boldsymbol{\theta}_j \mid \boldsymbol{\gamma}, Y_j)$ via Bayes' rule.
+The resulting posterior $P(\boldsymbol{\gamma} \mid \{Y\})$ has no closed form due to the intractable normalising constant $P(\{Y\})$; MCMC is therefore used to obtain samples from it. 
+These samples are then used as a prior to obtain the group-level posteriors $P(\boldsymbol{\theta}_j \mid \boldsymbol{\gamma}, Y_j)$ via Bayes' rule.
 
 \section{Methodology}
 

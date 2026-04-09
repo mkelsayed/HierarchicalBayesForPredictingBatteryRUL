@@ -1,0 +1,109 @@
+\section{Data Dictionary}
+
+% Table 1: Cell Level
+\begin{table}[H]
+\centering
+\caption{Cell Level Variables}
+\label{tab:cell_level}
+\begin{tabular}{lll}
+\toprule
+Variable & Description & Type \\
+\midrule
+\texttt{cycle\_life} & Number of cycles until EoL & Float \\
+\texttt{charge\_policy} & Charging protocol & String \\
+\texttt{summary} & Metadata for each cycle & Dictionary \\
+\texttt{cycles} & Time series of measurements & Dictionary \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Table 2: Summary Level
+\begin{table}[H]
+\centering
+\caption{Summary Level (Cycle-by-Cycle Metadata)}
+\label{tab:summary_level}
+\begin{tabular}{lll}
+\toprule
+Variable & Description & Type \\
+\midrule
+\texttt{IR} & Internal resistance & Numeric array \\
+\texttt{QC} & Charge capacity & Numeric array \\
+\texttt{QD} & Discharge capacity & Numeric array \\
+\texttt{Tavg} & Average temperature & Numeric array \\
+\texttt{Tmin} & Minimum temperature & Numeric array \\
+\texttt{Tmax} & Maximum temperature & Numeric array \\
+\texttt{chargetime} & Charge time & Numeric array \\
+\texttt{cycle} & Cycle number & Numeric array \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Table 3: Cycle Level
+\begin{table}[H]
+\centering
+\caption{Cycle Level (Intra-cycle Time Series)}
+\label{tab:cycle_level}
+\begin{tabular}{lll}
+\toprule
+Variable & Description & Type \\
+\midrule
+\texttt{I} & Current & Numeric array \\
+\texttt{Qc} & Charge capacity & Numeric array \\
+\texttt{Qd} & Discharge capacity & Numeric array \\
+\texttt{Qdlin} & Linear interpolated discharge capacity & Numeric array \\
+\texttt{T} & Temperature & Numeric array \\
+\texttt{Tdlin} & Linear interpolated temperature & Numeric array \\
+\texttt{V} & Voltage & Numeric array \\
+\texttt{dQdV} & Derived vectors of discharge & Numeric array \\
+\texttt{t} & Time & Numeric array \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Model Variables and Features}
+
+
+\begin{table}[H]
+\centering
+\caption{Variables}
+\begin{tabular}{ll}
+\toprule
+Symbol & Description \\
+\midrule
+$j = 1, \dots, J$ & Cycling condition group index \\
+$i = 1, \dots, n_j$ & Cell index within group $j$ \\
+$y_{ji}$ & EoL time (days) for cell $i$ in group $j$ \\
+$\boldsymbol{\theta}_j \in \mathbb{R}^4$ & Regression coefficients for group $j$ \\
+$\sigma^2_j$ & Variance of group $j$ model \\
+$\boldsymbol{\gamma} \in \mathbb{R}^{4 \times 2}$ & Hyperparameter matrix linking cycling conditions to group coefficients \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Feature vectors}
+\begin{tabular}{lll}
+\toprule
+Symbol & Components & Level \\
+\midrule
+$\mathbf{x}_{ji} \in \mathbb{R}^4$ & $(1, F1_{ji}, F2_{ji}, F3_{ji})^\top$ & Individual \\
+$\mathbf{g}_j \in \mathbb{R}^2$ & $(1, \bar{g}_j)^\top$ & Group \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Individual-level features (computed from first 100 cycles)}
+\begin{tabular}{ll}
+\toprule
+Symbol & Description \\
+\midrule
+$F1_{ji}$ & Variance of $\Delta Q(V)$ between cycles 10 and 100 \\
+$F2_{ji}$ & Minimum of $\Delta Q(V)$ over the same interval \\
+$F3_{ji}$ & Discharge capacity at cycle 2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\footnote{$\Delta Q(V)$ denotes the discharge curve difference as a function of voltage, following Severson et al. (2019).}
