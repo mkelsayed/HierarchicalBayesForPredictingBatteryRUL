@@ -37,14 +37,18 @@ Place it in a folder called `data/` then run the notebooks in the following orde
 ## Outline of Report
 
 * Introduction
-* Background (batteries, motivation for using BHM)
-* Data section
-  * Retrieval, included
-  * Cleaning
-  * EDA
-* Theory 
-  * Heirarchical Bayes
-  * Base line model
-  * MCMC
-* Results
+* Background
+* Data Overview
+  * Data Structure and Extraction
+  * Data Partitioning and Grouping Logic
+  * Grouping Results
+* Introduction to Hierarchical Bayes
+  * Multilevel Modelling
+  * Pooling Tradeoff
+  * Pooling Tradeoff: County Radon Levels
+  * Partial Pooling
+  * Hierarchical Bayes
+* Hierarchical Bayesian Model for Battery Lifetime Prediction 
+  * Model Details 
+  * Inference
 * Conclusion
