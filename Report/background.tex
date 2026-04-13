@@ -1,3 +1,14 @@
 \section{Background}
 
-The capacity of a battery is the amount of charge a battery can deliver in a single full discharge.
+The capacity of a lithium-ion battery --- the total charge deliverable in a full discharge --- fades 
+with repeated cycling. With time and use, storage capacity diminishes and internal resistance increases, driven by 
+degradation mechanisms that can occur simultaneously or trigger one another \cite{edge2021}. A battery is said to 
+reach end-of-life (EoL) when its capacity drops below 80\% of its initial value, following the criterion used by 
+Zhou et al.\ \cite{ZHOU20236117}.
+
+The rate at which a battery charges or discharges is characterized by the C-rate, defined as the ratio of applied 
+current to nominal capacity \cite{ossila_crate}. At 1C, a full charge or discharge completes in one hour; at 2C, 
+in thirty minutes. Higher C-rates induce greater mechanical stress during cycling and promote lithium plating during 
+charge \cite{edge2021}, both of which accelerate capacity fade. In the dataset used in this study, all cells are 
+discharged at a fixed 4C rate while the charging protocol varies --- making the average charging C-rate the primary 
+source of variability in operating conditions across cells.

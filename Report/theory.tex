@@ -11,7 +11,7 @@ This suggests allowing group-specific parameters:
 \[
 y_i = \alpha_{j[i]} + \beta_{j[i]} x_i + \epsilon_i
 \]
-where $j$ is the group index and $(\alpha_{j[i]}, \beta_{j[i]})$ follow some distribution. For example, they may be jointly normally distributed:
+where $j$ is the group index and $(\alpha_{j[i]}, \beta_{j[i]})$ follow some distribution. For example, they may be jointly normally distributed \cite{GelmanHill2007}:
 \[
 \begin{pmatrix} 
 \alpha_j \\ 
@@ -48,13 +48,13 @@ In the latter case, the parameter distribution is specified independently for ea
     \caption{Estimates $\pm$ standard errors for average log radon levels in Minnesota counties versus number of observations per county: (a) no-pooling, (b) partial pooling. Counties with fewer observations have more variable estimates and larger standard errors under no pooling, illustrating how small samples produce unreliable county-level estimates.}
 \end{figure}
 
-Gelman et al. analyzed a dataset consisting of radon levels for the 85 counties of Minnesota. The objective was to estimate the distribution of the radon levels of the houses within each county. The first proposed approach was to calculate statistics (e.g., average) using all homes from the sample (complete pooling). This approach does not consider variability among counties and complicates the task of estimating county-specific distributions. 
+Gelman et al.~\cite{GelmanHill2007} analyzed a dataset consisting of radon levels for the 85 counties of Minnesota. The objective was to estimate the distribution of the radon levels of the houses within each county. The first proposed approach was to calculate statistics (e.g., average) using all homes from the sample (complete pooling). This approach does not consider variability among counties and complicates the task of estimating county-specific distributions. 
 
 The second proposed approach was to calculate the average log-radon levels in each county (no pooling). With this approach, the authors found that the highest county-specific average log radon level of 85 was much larger than the values from different counties. 
 However, this outlier may not be representative of the actual average log radon levels of its county, since it was obtained from a sample of only two observations. No pooling therefore produces unreliable estimates for data-sparse groups, motivating a middle ground.
 
 \subsection*{Partial Pooling}
-Gelman et al. provided a middle ground between complete and no pooling, which they called partial pooling. Specifically, they defined the observation-level model as:
+Gelman et al.~\cite{GelmanHill2007} provided a middle ground between complete and no pooling, which they called partial pooling. Specifically, they defined the observation-level model as:
 \[
 y_i \sim N(\alpha_{j[i]} + \beta x_i, \sigma^2_y), \quad i = 1, \dots, n
 \]
@@ -77,7 +77,7 @@ Placing priors on these parameters gives the full hierarchical Bayesian model:
 \end{align*}
 
 \section*{Hierarchical Bayesian Model for Battery Lifetime Prediction}
-Following Zhou \& Howey (2023), we instantiate the three-level HBM for battery lifetime prediction. The response variable $y_{ji}$ denotes the EoL (in days) for cell $i$ in group $j$. 
+Following Zhou \& Howey~\cite{ZHOU20236117}, we instantiate the three-level HBM for battery lifetime prediction. The response variable $y_{ji}$ denotes the EoL (in days) for cell $i$ in group $j$. 
 At the individual level, each cell is represented by a feature vector $\mathbf{x}_{ji} \in \mathbb{R}^4$ constructed from early-cycle measurements; at the group level, each cycling condition 
 group is represented by $\mathbf{g}_j \in \mathbb{R}^2$, which encodes the group's average C-rate. A full description of model variables and features is provided in the Appendix.
 
@@ -92,7 +92,7 @@ how features relate to EoL across cycling conditions (Level 2). Crucially, at Le
 independently — they are drawn from a common distribution centred at $\boldsymbol{\gamma}^\top \mathbf{g}_j$, allowing for information sharing across groups.
 
 \subsection*{Inference}
-Inference follows a sequential process. First, the posterior over the hyperparameters is estimated via MCMC:
+Inference follows a sequential process. First, the posterior over the hyperparameters is estimated via MCMC~\cite{ZHOU20236117}:
 \[
 P(\boldsymbol{\gamma} \mid \{Y\}) \propto P(\boldsymbol{\gamma}) \prod_{j=1}^{J} P(Y_j \mid \boldsymbol{\gamma})
 \]
@@ -101,7 +101,7 @@ where $P(\boldsymbol{\gamma}) = \mathcal{N}(\mathbf{0}, 10\mathbf{I})$ is the hy
 P(Y_j \mid \boldsymbol{\gamma}) = \int P(Y_j \mid \boldsymbol{\theta}_j) \cdot P(\boldsymbol{\theta}_j \mid \boldsymbol{\gamma}) \, d\boldsymbol{\theta}_j
 \]
 The resulting posterior $P(\boldsymbol{\gamma} \mid \{Y\})$ has no closed form due to the intractable normalising constant $P(\{Y\})$; MCMC is therefore used to obtain samples from it. 
-These samples are then used as a prior to obtain the group-level posteriors $P(\boldsymbol{\theta}_j \mid \boldsymbol{\gamma}, Y_j)$ via Bayes' rule.
+These samples are then used as a prior to obtain the group-level posteriors $P(\boldsymbol{\theta}_j \mid \boldsymbol{\gamma}, Y_j)$ via Bayes' rule~\cite{ZHOU20236117}.
 
 \section{Methodology}
 
