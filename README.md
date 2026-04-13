@@ -1,5 +1,24 @@
 # HierarchalBayesForPredictingBatteryRUL
 
+## Environment Setup
+
+Two conda environments are used in this project — one for preprocessing and EDA and another for modeling.
+
+**Preprocessing and EDA:**
+```bash
+conda env create -f environment_preprocessing_EDA.yml
+conda activate 
+```
+
+**Modeling:**
+```bash
+conda env create -f environment_analysis.yml
+conda activate 
+```
+
+The first three notebooks mentioned below can run on the first environment, while the second runs on the second environment.
+
+
 ## Data Acquisition
 
 We aquired data from 2 sources: 
