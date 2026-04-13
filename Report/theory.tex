@@ -109,7 +109,7 @@ Conditioning on $\gamma$ and $Y_j$ and normalizing gives:
 \begin{align}
 P(\boldsymbol{\theta}_j \mid \gamma, Y_j) &= \frac{P(Y_j,\, \boldsymbol{\theta}_j,\, \gamma)}{P(Y_j \mid \gamma)} \\[10pt]
                                            &= \frac{P(Y_j \mid \boldsymbol{\theta}_j,\, \gamma) \cdot P(\boldsymbol{\theta}_j,\, \gamma)}{P(Y_j \mid \gamma)} \\[10pt]
-                                           &= \frac{P(Y_j \mid \boldsymbol{\theta}_j) \cdot P(\boldsymbol{\theta}_j \mid \gamma) \cdot P(\gamma)}{P(Y_j \mid \gamma) \cdot P(\gamma)}
+                                           &= \frac{P(Y_j \mid \boldsymbol{\theta}_j) \cdot P(\boldsymbol{\theta}_j \mid \gamma) \cdot P(\gamma)}{P(Y_j \mid \gamma)}
 \end{align}
 
 where in the third line we use the fact that once $\boldsymbol{\theta}_j$ is known, $\gamma$ carries no additional information about $Y_j$, so $P(Y_j \mid \boldsymbol{\theta}_j,\, \gamma) = P(Y_j \mid \boldsymbol{\theta}_j)$. 
