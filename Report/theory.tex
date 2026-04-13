@@ -77,6 +77,7 @@ Placing priors on these parameters gives the full hierarchical Bayesian model:
 \end{align*}
 
 \section*{Hierarchical Bayesian Model for Battery Lifetime Prediction}
+\subsection*{Model Details}
 Following Zhou \& Howey~\cite{ZHOU20236117}, we instantiate the three-level HBM for battery lifetime prediction. The response variable $y_{ji}$ denotes the EoL (in days) for cell $i$ in group $j$. 
 At the individual level, each cell is represented by a feature vector $\mathbf{x}_{ji} \in \mathbb{R}^4$ constructed from early-cycle measurements; at the group level, each cycling condition 
 group is represented by $\mathbf{g}_j \in \mathbb{R}^2$, which encodes the group's average C-rate. A full description of model variables and features is provided in the Appendix.
