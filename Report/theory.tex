@@ -102,9 +102,17 @@ where $P(\boldsymbol{\gamma}) = \mathcal{N}(\mathbf{0}, 10\mathbf{I})$ is the hy
 P(Y_j \mid \boldsymbol{\gamma}) = \int P(Y_j \mid \boldsymbol{\theta}_j) \cdot P(\boldsymbol{\theta}_j \mid \boldsymbol{\gamma}) \, d\boldsymbol{\theta}_j
 \]
 The resulting posterior $P(\boldsymbol{\gamma} \mid \{Y\})$ has no closed form due to the intractable normalising constant $P(\{Y\})$; MCMC is therefore used to obtain samples from it. 
-These samples are then used as a prior to obtain the group-level posteriors $P(\boldsymbol{\theta}_j \mid \boldsymbol{\gamma}, Y_j)$ via Bayes' rule~\cite{ZHOU20236117}.
+These samples are then used as a prior to obtain the group-level posteriors $P(\boldsymbol{\theta}_j \mid \boldsymbol{\gamma}, Y_j)$ via Bayes' rule~\cite{ZHOU20236117}. Starting from the joint distribution, we have:
+$$P(\boldsymbol{\theta}_j, \gamma, Y_j) = P(Y_j \mid \boldsymbol{\theta}_j) \cdot P(\boldsymbol{\theta}_j \mid \gamma) \cdot P(\gamma)$$
+Conditioning on $\gamma$ and $Y_j$ and normalizing gives:
 
-\section{Methodology}
+\begin{align}
+P(\boldsymbol{\theta}_j \mid \gamma, Y_j) &= \frac{P(Y_j,\, \boldsymbol{\theta}_j,\, \gamma)}{P(Y_j \mid \gamma)} \\[10pt]
+                                           &= \frac{P(Y_j \mid \boldsymbol{\theta}_j,\, \gamma) \cdot P(\boldsymbol{\theta}_j,\, \gamma)}{P(Y_j \mid \gamma)} \\[10pt]
+                                           &= \frac{P(Y_j \mid \boldsymbol{\theta}_j) \cdot P(\boldsymbol{\theta}_j \mid \gamma) \cdot P(\gamma)}{P(Y_j \mid \gamma) \cdot P(\gamma)}
+\end{align}
+
+where in the third line we use the fact that once $\boldsymbol{\theta}_j$ is known, $\gamma$ carries no additional information about $Y_j$, so $P(Y_j \mid \boldsymbol{\theta}_j,\, \gamma) = P(Y_j \mid \boldsymbol{\theta}_j)$. 
 
 \subsection{Bayesian Heirarchical Models}
 
