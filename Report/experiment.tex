@@ -4,6 +4,8 @@ The analysis was completed in Python, and the hierarchical Bayesian model built 
 
 The data was randomly split into a training and test dataset, with 135 cells in training set and 34 cell in the test set. The train-test split was stratified on the cycling group $g$, ensuring that the model will encounter the same proportions of cells from each cycling condition group. On the training set, a 5-fold cross validation was performed 4 times (so 20 results will be collected) to ensure that the model is not overfitting to the dataset. After that, the model was fit to the whole training set and evaluated using the unseen test set.
 
+\section{Results and Discussion}
+
 The performance of the Hierarchical Bayesian model is compared against two baselines: a ridge regression model with just the features in Table \ref{table:features}, and one including the cycling group $g$ as well. Root mean error squared (RMSE) and mean absolute percentage error (MAPE) are used as metrics to evaluate the performance of the models. We consider MAPE as an additional metric because RMSE is significantly influenced by outliers.
 \begin{align*}
     \text{RMSE} &= \sqrt{\frac{\sum^N_{i=1} (y_i - \hat{y}_i)^2}{N}} \\

@@ -1,14 +1,14 @@
-\section*{Data Overview}
+\section{Data Overview}
 The primary data for this study is sourced from the battery cycling datasets hosted on \texttt{data.matr.io}~\cite{Matrdata}.. 
 The consolidated dataset consists of 169 Lithium-ion phosphate (LFP) cells cycled under varying fast-charging conditions. These cells represent 78 distinct charging protocols and have lifetimes that vary accordingly.
 
-\subsection*{Data Structure and Extraction}
+\subsection{Data Structure and Extraction}
 The raw data, originally stored in MATLAB format, was ingested into a Python-based workflow following the methodology from Attia et al.'s GitHub~\cite{Braatz2019github}. 
 The dataset is organized hierarchically: at the cell level, each battery is indexed by a unique key and carries a charging protocol string and a cycle life — the number of cycles until end-of-life (EoL) is reached. 
 Below this, cycle-by-cycle summary measurements (capacity, internal resistance, temperature) and intra-cycle time-series (voltage, current, capacity curves) are accessible for each cell. 
 A full description of available variables is provided in the Appendix.
 
-\subsection*{Data Partitioning and Grouping Logic}
+\subsection{Data Partitioning and Grouping Logic}
 Zhou and Howey (2023) partitioned the data into eight groups based on their average C-rate and calculated the variance partition coefficient (VPC). Specifically, they calculated:
 
 \begin{align*}
@@ -22,7 +22,7 @@ They obtained a VPC of 74.5\%, implying that between-group variance accounts for
 variation would be discarding useful information about the data's variability, while fitting separate statistical models on each group would ignore the remaining within group variability.
 A hierarchical Bayesian model addresses both by partially pooling estimates across groups.
 
-\subsection*{Grouping Results}
+\subsection{Grouping Results}
 Following Zhou and Howey ~\cite{ZHOU20236117}, we first applied constrained K-means clustering on average charging C-rate. 
 While this produced groups with low within-group C-rate variance (see Figure 1), the resulting VPC was only 38.973\%. 
 We subsequently grouped cells by their unique charging policy string and optimized the grouping via a hill-climbing algorithm — iteratively reassigning policy strings across the eight groups to maximise VPC — achieving 74.406%.

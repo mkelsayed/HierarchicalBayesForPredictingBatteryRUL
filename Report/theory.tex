@@ -1,6 +1,6 @@
-\section*{Introduction to Hierarchical Bayes}
+\section{Introduction to Hierarchical Bayes}
 
-\subsection*{Multilevel Modelling}
+\subsection{Multilevel Modelling}
 To motivate hierarchical modelling, consider first the standard linear regression setting:
 \[
 y = \beta_0 + \beta_1 x_i + \epsilon
@@ -25,7 +25,7 @@ where $j$ is the group index and $(\alpha_{j[i]}, \beta_{j[i]})$ follow some dis
 \right), \text{ for } j = 1, \dots, J
 \]
 
-\subsection*{Pooling Tradeoff}
+\subsection{Pooling Tradeoff}
 In the example above, the multilevel regression may use the same parameters for all groups (complete pooling), or fit entirely separate models for each group with no information shared across them (no pooling). 
 In the latter case, the parameter distribution is specified independently for each group:
 \[
@@ -41,7 +41,7 @@ In the latter case, the parameter distribution is specified independently for ea
 \right), \quad j = 1, \dots, J
 \]
 
-\subsection*{Pooling Tradeoff: County Radon Levels}
+\subsection{Pooling Tradeoff: County Radon Levels}
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{radon_example.png}
@@ -53,7 +53,7 @@ Gelman et al.~\cite{GelmanHill2007} analyzed a dataset consisting of radon level
 The second proposed approach was to calculate the average log-radon levels in each county (no pooling). With this approach, the authors found that the highest county-specific average log radon level of 85 was much larger than the values from different counties. 
 However, this outlier may not be representative of the actual average log radon levels of its county, since it was obtained from a sample of only two observations. No pooling therefore produces unreliable estimates for data-sparse groups, motivating a middle ground.
 
-\subsection*{Partial Pooling}
+\subsection{Partial Pooling}
 Gelman et al.~\cite{GelmanHill2007} provided a middle ground between complete and no pooling, which they called partial pooling. Specifically, they defined the observation-level model as:
 \[
 y_i \sim N(\alpha_{j[i]} + \beta x_i, \sigma^2_y), \quad i = 1, \dots, n
@@ -66,7 +66,7 @@ Together they form a two-level structure: in the first equation, each observatio
 
 The two-level structure creates dependency between group-level intercepts through the shared prior $N(\mu_\alpha, \sigma^2_\alpha)$. Specifically, each $\alpha_j$ is estimated from its group's data and also influenced by all other groups. This pulls data-sparse groups toward the population mean $\mu_\alpha$ while leaving data-rich groups largely unaffected. The strength of the pull is also determined by $\sigma_\alpha$, which is learned from the data.
 
-\subsection*{Hierarchical Bayes}
+\subsection{Hierarchical Bayes}
 In the multilevel modelling example above, the parameters $\mu_\alpha$ and $\sigma^2_\alpha$ are unknown. In Bayesian statistics, these parameters are treated as random variables which are assigned prior distributions. 
 Placing priors on these parameters gives the full hierarchical Bayesian model:
 
@@ -76,8 +76,8 @@ Placing priors on these parameters gives the full hierarchical Bayesian model:
 &\textbf{Level 1 (Observation model):} & y_i &\sim N(\alpha_{j[i]} + \beta x_i, \sigma^2_y), \quad i = 1, \dots, n
 \end{align*}
 
-\section*{Hierarchical Bayesian Model for Battery Lifetime Prediction}
-\subsection*{Model Details}
+\section{Hierarchical Bayesian Model for Battery Lifetime Prediction}
+\subsection{Model Details}
 Following Zhou \& Howey~\cite{ZHOU20236117}, we instantiate the three-level HBM for battery lifetime prediction. The response variable $y_{ji}$ denotes the EoL (in days) for cell $i$ in group $j$. 
 At the individual level, each cell is represented by a feature vector $\mathbf{x}_{ji} \in \mathbb{R}^4$ constructed from early-cycle measurements; at the group level, each cycling condition 
 group is represented by $\mathbf{g}_j \in \mathbb{R}^2$, which encodes the group's average C-rate. A full description of model variables and features is provided in the Appendix.
@@ -92,7 +92,7 @@ The three-level structure encodes two sources of variability simultaneously: ind
 how features relate to EoL across cycling conditions (Level 2). Crucially, at Level 2, the group coefficients $\boldsymbol{\theta}_j$ are not estimated 
 independently — they are drawn from a common distribution centred at $\boldsymbol{\gamma}^\top \mathbf{g}_j$, allowing for information sharing across groups.
 
-\subsection*{Inference}
+\subsection{Inference}
 Inference follows a sequential process. First, the posterior over the hyperparameters is estimated via MCMC~\cite{ZHOU20236117}:
 \[
 P(\boldsymbol{\gamma} \mid \{Y\}) \propto P(\boldsymbol{\gamma}) \prod_{j=1}^{J} P(Y_j \mid \boldsymbol{\gamma})
@@ -113,22 +113,3 @@ P(\boldsymbol{\theta}_j \mid \gamma, Y_j) &= \frac{P(Y_j,\, \boldsymbol{\theta}_
 \end{align}
 
 where in the third line we use the fact that once $\boldsymbol{\theta}_j$ is known, $\gamma$ carries no additional information about $Y_j$, so $P(Y_j \mid \boldsymbol{\theta}_j,\, \gamma) = P(Y_j \mid \boldsymbol{\theta}_j)$. 
-
-\subsection{Bayesian Heirarchical Models}
-
-A hierarchical model is a statistical model that includes multiple levels of parameters, where the parameters at one level are treated as random variables that depend on parameters at a higher level. In a Bayesian hierarchical model, we specify prior distributions for the parameters at each level, and use Bayes' theorem to update our beliefs about these parameters based on observed data.
-
-We would like to capture both individual battery characteristics and the influence of different usage (cycling) conditions. A two level hierarchical structure is considered:
-\begin{itemize}
-    \item Level 1 (Cell-level parameters $\theta_j$): Each battery $j$ has its own parameters $\theta_j$ that represent how early cycle features relate to battery aging for that particular subgroup or cycling condition.
-    \item Level 2 (Hyperparameters $\gamma$): These represent the parameters that govern the distribution of cell-level parameters across all subgroups, meaning they capture similarities across different batteries and cycling conditions.
-\end{itemize}
-
-Bayes rule is used to combine prior knowledge with the observed early-cycle data from multiple batteries to estimate posterior distributions of parameters at both levels. 
-
-The level 2 posterior is calculated as 
-$$
-P(\gamma | \{Y\}) \propto \text{Likelihood} \times \text{Prior}
-$$
-
-\subsection{Multichain Monte Carlo}
