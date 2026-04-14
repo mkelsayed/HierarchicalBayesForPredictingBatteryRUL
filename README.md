@@ -16,7 +16,7 @@ conda env create -f environment_analysis.yml
 conda activate 
 ```
 
-The first three notebooks mentioned below can run on the first environment, while the second runs on the second environment.
+The first three notebooks mentioned below can run on the first environment. The fourth notebook runs on the second environment.
 
 
 ## Data Acquisition
