@@ -58,4 +58,35 @@ Table \ref{table:RMSEandMAPE} shows the average RMSE and MAPE after each repetit
 \label{table:finalRMSEandMAPE}
 \end{table}
 
-Now using just a training and test set, table \ref{table:finalRMSEandMAPE} shows the RMSE and MAPE on the test set predictions and figure \ref{fig:results_scatterplot} shows the EoL predictions from the HBM and baseline models compared to the true values.
+Now using just a training and test set, table \ref{table:finalRMSEandMAPE} shows the RMSE and MAPE on the test set predictions and figure \ref{fig:results_scatterplot} shows the EoL predictions from the HBM and baseline models compared to the true values. On the test set, HBM achieves a MAPE of $13.9\%$, outperforming both baselines, though its RMSE of $18.8$ days is marginally higher than the baselines ($18.2$ days). The divergence between RMSE and MAPE on the test set suggests the presence of outliers that disproportionately inflate the HBM's squared error, while the model generalizes better on the majority of cells. This is consistent with the cross-validation results, where HBM's advantage was clearest under MAPE.
+
+\begin{table}
+    \centering
+\begin{adjustbox}{rotate=90}
+\begin{tabular}{lrrrrrrrrr}
+\hline
+ & mean & sd & hdi\_3\% & hdi\_97\% & mcse\_mean & mcse\_sd & ess\_bulk & ess\_tail & $\hat{R}$ \\
+\hline
+gamma\_intercept[0] & 13.405& 3.616& 6.303& 20.183& 0.109& 0.106& 1148.00 & 1676.00 & 1.00 \\
+gamma\_intercept[1] & 2.586& 1.526& -0.247& 5.346& 0.041& 0.058& 1558.00 & 1814.00 & 1.00 \\
+gamma\_intercept[2] & -0.047& 1.706& -3.254& 3.168& 0.038& 0.028& 2012.00 & 2111.00 & 1.00 \\
+gamma\_intercept[3] & 1.128& 2.635& -4.206& 5.756& 0.067& 0.052& 1561.00 & 1997.00 & 1.01 \\
+gamma\_slope[0] & -3.269& 0.873& -4.913& -1.545& 0.026& 0.026 & 1150.00 & 1656.00 & 1.00 \\
+gamma\_slope[1] & -0.601& 0.371& -1.266& 0.10 & 0.01 & 0.014& 1545.00 & 1773.00 & 1.00 \\
+gamma\_slope[2] & 0.01 & 0.409& -0.749& 0.793& 0.009& 0.007& 2002.00 & 2135.00 & 1.00 \\
+gamma\_slope[3] & -0.261& 0.628& -1.475& 0.901& 0.016& 0.012& 1564.00 & 1985.00 & 1.01 \\
+sigma\_theta[0] & 0.472& 0.226& 0.134& 0.935& 0.007& 0.006& 894.00 & 897.00 & 1.00 \\
+sigma\_theta[1] & 0.097& 0.091& 0.00 & 0.256& 0.002& 0.003& 1725.00 & 1773.00 & 1.00 \\
+sigma\_theta[2] & 0.086& 0.076& 0.00 & 0.216& 0.002& 0.002& 1797.00 & 1840.00 & 1.00 \\
+sigma\_theta[3] & 0.115& 0.116& 0.00 & 0.307& 0.003& 0.006& 1485.00 & 1467.00 & 1.00 \\
+sigma\_y & 0.55 & 0.037& 0.481& 0.615& 0.001& 0.001& 3433.00 & 3011.00 & 1.00 \\
+\hline
+\end{tabular}
+\end{adjustbox}
+\caption{MCMC summary statistics for the final model parameters}
+\label{tab:mcmcresults}
+\end{table}
+
+To assess model validity, table \ref{tab:mcmcresults} shows MCMC convergence diagnostics for the final model fit. All parameters achieved $\hat{R} \leq 1.01$ and bulk effective sample sizes above 894, indicating that the chains mixed well and the posterior estimates are reliable \cite{vehtari2021rank}. The observation noise parameter $\sigma_y$ was tightly estimated at $0.55 \pm 0.04$ (standardized units) with an ESS of 3433, showing high posterior certainty about the residual variance.
+
+The hyperprior slope $\gamma_{\text{slope},0}$, governing how mean C-rate modulates the group-level intercept, has a posterior mean of $-3.27$ with a 94\% HDI of $[-4.91, -1.55]$, which excludes zero. This provides credible evidence that groups with higher average charge rates are associated with shorter battery lifetimes at the group level, and justifies the hierarchical structure of the model. Furthermore, $\sigma_{\theta,0} = 0.47$ with HDI $[0.13, 0.94]$ confirms that meaningful variation in baseline lifetime persists across groups beyond what C-rate alone explains. In contrast, the hyperprior slopes for the early-cycle features $\gamma_{\text{slope},1{-}3}$ all have HDIs that include zero, indicating that the regression coefficients for F1, F2, and F3 are shared across groups rather than modulated by cycling condition. The hierarchy therefore operates primarily through group intercepts, while feature effects generalize across charging protocols.
