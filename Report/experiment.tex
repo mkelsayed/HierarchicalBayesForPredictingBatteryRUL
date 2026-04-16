@@ -1,10 +1,11 @@
 \section{Experiment}
 
-The analysis was completed in Python, and the hierarchical Bayesian model built in Python using the PyMC package \cite{pymc2023}. 
+The analysis was completed in Python, and the hierarchical Bayesian model was built in Python using the PyMC package \cite{pymc2023}. 
 
-First, the data set was processed following section \ref{sec:dataoverview}. Early cycle features described in table \ref{table:features} were extracted and the data was partitioned into 8 groups like described in section \ref{subsec:GroupingResults}. The following experiment was completed using the grouping using the hill-climbing algorithm, because a high VPC justifies the use of a hierarchical model since group level effect would be significant. If the authors grouping method was used in this analysis with our data set, the VPC was only 39\% and the results of the hierarchical Baysian model would not be significantly.
-
-The data was randomly split into a training and test dataset, with 135 cells in training set and 34 cell in the test set. The train-test split was stratified on the cycling group $g$, ensuring that the model will encounter the same proportions of cells from each cycling condition group. On the training set, a 5-fold cross validation was performed 4 times (so 20 results will be collected) to ensure that the model is not overfitting to the dataset. After that, the model was fit to the whole training set and evaluated using the unseen test set.
+First, the data set was processed following section \ref{sec:dataoverview}. Early cycle features described in table \ref{table:features} were extracted and the data was partitioned into 8 groups as described in section \ref{subsec:GroupingResults}. 
+The following experiment uses the hill-climbing grouping, which yielded a higher VPC ($74.5\%$ vs.\ $39.0\%$ for K-means) — indicating greater between-group variance 
+relative to total variance (section~\ref{sec:groupinglogic}), and thus a more statistically justified hierarchical structure. the HBM under K-means grouping confirmed this, showing no improvement over the baseline.
+The data was split into training and test sets of 135 and 34 cells respectively, stratified by cycling group $g$. A 5-fold cross-validation was performed 4 times (yielding 20 error estimates) to assess the generalizability of the model.
 
 \section{Results and Discussion}
 
