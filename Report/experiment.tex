@@ -32,11 +32,11 @@ The performance of the Hierarchical Bayesian model is compared against two basel
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.75\linewidth]{kfolds_results.png}
-    \caption{Histogram of all cross validation RSME and MAPE results for the HBM and baseline}
+    \caption{Histogram of all cross validation RMSE and MAPE results for the HBM and baseline}
     \label{fig:kfolds_results}
 \end{figure}
 
-Table \ref{table:RMSEandMAPE} shows the average RMSE and MAPE after each repetition and fold, and figure \ref{fig:kfolds_results} shows the RMSE and MAPE values for each fold and repetition.  HBM achieves a MAPE of $16.5\%$, outperforming both baselines, though its RMSE of $9.47$ days is marginally higher than the baseline with feature $g$ ($9.10$ days). The divergence between RMSE and MAPE on the test set suggests the presence of outliers that disproportionately inflate the HBM's squared error, while the model generalizes better on the majority of cells. This is consistent with the cross-validation results, where HBM's advantage was clearest under MAPE.
+Table \ref{table:RMSEandMAPE} shows the average RMSE and MAPE after each repetition and fold, and figure \ref{fig:kfolds_results} shows the RMSE and MAPE values for each fold and repetition.  HBM achieves a MAPE of $16.5\%$, outperforming both baselines, though its RMSE of $9.47$ days is marginally higher than the baseline with feature $g$ ($9.10$ days). The divergence between RMSE and MAPE suggests the presence of outliers that disproportionately inflate the HBM's squared error, while the model generalizes better on the majority of cells. This is consistent with the cross-validation results, where HBM's advantage was clearest under MAPE.
 
 \begin{figure}[!ht]
     \centering
