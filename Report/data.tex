@@ -9,14 +9,12 @@ Below this, cycle-by-cycle summary measurements (capacity, internal resistance, 
 A full description of available variables is provided in the Appendix.
 
 \subsection{Data Partitioning and Grouping Logic}\label{sec:groupinglogic}
-Zhou and Howey (2023) partitioned the data into eight groups based on their average C-rate and calculated the variance partition coefficient (VPC). Specifically, they calculated:
-
+Zhou and Howey \cite{ZHOU20236117} partitioned the data into eight groups based on their average C-rate and calculated the variance partition coefficient (VPC). Specifically, they calculated:
 \begin{align*}
 \text{VPC} &= \frac{\sigma^2_{\text{group}}}{\sigma^2_{\text{individual}} + \sigma^2_{\text{group}}} \\
 \sigma^2_{\text{group}} &= \text{var}\left(\bar{u}_j - \bar{u}\right), \quad \bar{u} = \frac{1}{N} \sum_{j=1}^{k} \sum_{i=1}^{n_j} y_{ji} \\
 \sigma^2_{\text{individual}} &= \text{var}\left(y_{ji} - \bar{u}_j\right), \quad \bar{u}_j = \frac{1}{n_j} \sum_{i=1}^{n_j} y_{ji}
 \end{align*}
-
 where $\sigma^2_{\text{group}}$ represents lifetime variance between groups and $\sigma^2_{\text{individual}}$ represents the total within-group lifetime variance. 
 They obtained a VPC of 74.5\%, implying that between-group variance accounts for the majority of total lifetime variance. It follows that any statistical model which ignores group-level
 variation would be discarding useful information about the data's variability, while fitting separate statistical models on each group would ignore the remaining within group variability.

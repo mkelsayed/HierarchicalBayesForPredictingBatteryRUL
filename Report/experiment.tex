@@ -1,6 +1,8 @@
 \section{Experiment}
 
-The analysis was completed in Python, and the hierarchical Bayesian model was built in Python using the PyMC package \cite{pymc2023}. 
+The analysis was completed in Python, and the hierarchical Bayesian model was built in Python using the PyMC package \cite{pymc2023}. Our code for this project is available at: 
+
+\texttt{https://github.com/mkelsayed/HierarchicalBayesForPredictingBatteryRUL}
 
 First, the data set was processed following section \ref{sec:dataoverview}. Early cycle features described in table \ref{table:features} were extracted and the data was partitioned into 8 groups as described in section \ref{subsec:GroupingResults}. 
 The following experiment uses the hill-climbing grouping, which yielded a higher VPC ($74.5\%$ vs.\ $39.0\%$ for K-means) — indicating greater between-group variance 
