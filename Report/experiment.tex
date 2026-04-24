@@ -17,7 +17,7 @@ The performance of the Hierarchical Bayesian model is compared against two basel
     \text{MAPE} &= \frac{1}{N}\sum^N_{i=1} \left| \frac{y_i - \hat{y}_i}{y_i} \right|
 \end{align*}
 
-\begin{table}[!ht]
+\begin{table}[!htb]
 \centering
 \begin{tabular}{cccc}
 \hline
@@ -31,7 +31,7 @@ The performance of the Hierarchical Bayesian model is compared against two basel
 \label{table:RMSEandMAPE}
 \end{table}
 
-\begin{figure}[!ht]
+\begin{figure}[!htb]
     \centering
     \includegraphics[width=0.75\linewidth]{kfolds_results.png}
     \caption{Histogram of all cross validation RMSE and MAPE results for the HBM and baseline}
@@ -40,9 +40,11 @@ The performance of the Hierarchical Bayesian model is compared against two basel
 
 Table \ref{table:RMSEandMAPE} shows the average RMSE and MAPE after each repetition and fold, and figure \ref{fig:kfolds_results} shows the RMSE and MAPE values for each fold and repetition.  HBM achieves a MAPE of $16.5\%$, outperforming both baselines, though its RMSE of $9.47$ days is marginally higher than the baseline with feature $g$ ($9.10$ days). The divergence between RMSE and MAPE suggests the presence of outliers that disproportionately inflate the HBM's squared error, while the model generalizes better on the majority of cells. This is consistent with the cross-validation results, where HBM's advantage was clearest under MAPE.
 
-\begin{figure}[!ht]
+\begin{figure}[!htb]
     \centering
     \includegraphics[width=0.75\linewidth]{results_scatterplot.png}
     \caption{Predicted v.s. actual EoL (in days) for HBM and baseline on one fold}
     \label{fig:results_scatterplot}
 \end{figure}
+
+Table \ref{fig:results_scatterplot} shows a scatterplot of the predicted v.s. actual EoL on one fold for both HBM and the baseline. We can see that HBM predictions are generally closer to the true value compared to the baseline, with the exception of an outlier.
